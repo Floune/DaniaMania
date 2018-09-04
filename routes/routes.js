@@ -6,6 +6,7 @@ let Seeder = require('../db/seed');
 let Post = require('../app/models/post');
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
+
 mongoose.connect('mongodb://localhost:27017/posts', {useNewUrlParser: true});
 Seeder.seed();
 
@@ -19,6 +20,8 @@ router.post('/upload/', function(req, res) {
 	post.mail = req.body.mail;
 	post.popularity = req.body.popularity;	
 	post.emplacement = req.body.emplacement;
+	post.title = req.body.title;
+	post.content = req.body.content;
 	post.validate(function(e) {
 		if (e) {
 			res.send({status: "error", msg: "erreur de validation", data: e});
@@ -34,11 +37,15 @@ router.post('/upload/', function(req, res) {
 router.put('/setpwd', function(req, res) {
 	let pwd = req.body.pwd;
 	Post.findOne({_id: req.body.id}, function(e, post) {
-		bcrypt.hash(pwd, saltRounds, function(err, hash) {
-			post.pwd = hash;
-			post.save();
-			res.send({status: "success", msg: "password créé"});
-		});
+		if (e) {
+			res.send({status: 'error', msg: e});
+		} else {
+			bcrypt.hash(pwd, saltRounds, function(err, hash) {
+				post.pwd = hash;
+				post.save();
+				res.send({status: "success", msg: "password créé"});
+			});
+		}
 	});
 });
 
@@ -49,8 +56,9 @@ router.get('/soundbank', function(req, res) {
 		if (e) {
 			res.send({status: "error", msg: "erreur", data: e});
 		}
-
-		res.send({status: "success", msg: "success", posts});
+		else {
+			res.send({status: "success", msg: "success", posts});
+		}
 	});
 });
 
@@ -62,24 +70,40 @@ router.get('/search', function(req, res) {
 //Edition de post
 router.put('/edit', function(req, res) {
 	Post.findOneAndUpdate({_id: req.body.id}, {$set:req.body}, function(e, post) {
-		let hash = post.pwd;
-		bcrypt.compare(req.body.hash, hash, function(err, response) {
-			if (response == false) {
-				res.send({status: 'error', msg: err});
-			} else {
-				res.send({status: "success", msg: "Contact mis à jour"});
-			}
-		});
+		if (e) {
+			res.send ({status: 'error', msg: e});
+		}
+		else {
+			let hash = post.pwd;
+			bcrypt.compare(req.body.hash, hash, function(err, response) {
+				if (response == false) {
+					res.send({status: 'error', msg: err});
+				} else {
+					res.send({status: "success", msg: "Contact mis à jour"});
+				}
+			});
+		}
 	});
 });
 
 //Suppression de post
 router.delete('/delete/', function(req, res) {
-	// if (e) {
-	// 	res.send({status: "error", msg: "erreur", data: e});
-	// }
-	console.log(req.query);
-	res.send({status: "success", msg: "success"});
+	Post.findOne({_id: req.query.id}, function(e, post) {
+		if (e) {
+			res.json({status: "error", msg: "error", data: e});
+		}
+		else {
+			let hash = post.pwd;
+			bcrypt.compare(req.body.hash, hash, function(err, response) {
+				if (response == false) {
+					res.send({status: 'error', msg: err});
+				} else {
+					post.remove(function(e) {
+						res.json({status: "success", msg: "post supprimé"});
+					});
+				}
+			});
+		}
+	});
 });
-
 module.exports = router;
