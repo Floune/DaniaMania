@@ -13,8 +13,9 @@ router.get('/', function(req, res) {
 	res.send({status: 'success', msg: "yeahyeah"});
 });
 
+
 //Upload
-router.post('/upload/', post_controller.create);
+router.post('/upload', post_controller.create);
 //soundbank
 router.get('/soundbank', post_controller.get_list);
 //Recherche d'un post

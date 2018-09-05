@@ -14,6 +14,7 @@ let Seeder = {
 	createContact: function() {
 		let post = new Post();		
 		post.author = 'dania';
+		post.title = 'Ultra';
 		post.pwd = '5';
 		post.mail = 'daniamail';
 		post.popularity = 5;

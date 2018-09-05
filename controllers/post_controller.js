@@ -1,7 +1,6 @@
-let Post = require('../app/models/post.js');
+let Post = require('../app/models/post');
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 
 exports.create = function(req, res) {
 	let post = new Post();		
@@ -24,23 +23,8 @@ exports.create = function(req, res) {
 };
 
 exports.edit = function(req, res) {
-	Post.findOne({_id: req.body.id}, function(e, post) {
-		let pwd = req.body.pwd;
-		let hash = post.hash;
-		bcrypt.compare(pwd, hash, function(err, response) {
-			if(response) {
-				Post.findOneAndUpdate({_id: req.body.id}, {$set:req.body}, function(e, post) {
-					if (e) {
-						res.send({status: 'error', msg: 'post introuvable'});
-					}
-					else {
-						res.send({status: 'success', msg: 'success'});
-					}
-				});
-			} else {
-				res.send({status: 'error', msg: 'password not matching'});
-			} 
-		});
+	Post.findOneAndUpdate({_id: req.body.id}, {$set:req.body}, function(e, post) {
+		console.log('cool')
 	});
 };
 
@@ -56,32 +40,20 @@ exports.get_list = function(req, res) {
 };
 
 exports.search = function(req, res) {
-	console.log(req.query);
-	Post.find(req.query, function(e, post) {
-		res.send({status: 'success', msg: 'success', data: post});
+	Post.find(req.query).exec(function(e, post) {
+		if (e) {
+			res.send({status: 'error', msg: e});
+		} else {
+			res.send({status: 'success', msg: 'success', data: post});
+		}
 	});
 };
 
 exports.delete = function(req, res) {
-	Post.findOne({_id: req.query.id}, function(e, post) {
-		let pwd = req.query.pwd;
-		let hash = post.hash;
-		bcrypt.compare(pwd, hash, function(err, response) {
-			if(response) {
-				Post.findOneAndRemove({_id: req.query.id}, function(e, post) {
-					if (e) {
-						res.send({status: 'error', msg: 'post'});
-					}
-					else {
-						res.send({status: 'success', msg: 'success'});
-					}
-				});
-			} else {
-				res.send({status: 'error', msg: 'password not matching'});
-			} 
-		});
+	Post.findOneAndRemove({_id: req.query.id}, function(e, post) {
+		console.log('entrée supprimée');
 	});
-}
+};
 
 exports.setpwd = function(req, res) {
 	let pwd = req.body.hash;
