@@ -4,8 +4,7 @@ let app = express();
 let mongoose = require('mongoose');
 let Seeder = require('../db/seed');
 let Post = require('../app/models/post');
-let bcrypt = require('bcrypt');
-const saltRounds = 10;
+let post_controller = require('../controllers/post_controller');
 
 mongoose.connect('mongodb://localhost:27017/posts', {useNewUrlParser: true});
 Seeder.seed();
@@ -13,97 +12,18 @@ Seeder.seed();
 router.get('/', function(req, res) {
 	res.send({status: 'success', msg: "yeahyeah"});
 });
+
 //Upload
-router.post('/upload/', function(req, res) {
-	var post = new Post();		
-	post.author = req.body.author;
-	post.mail = req.body.mail;
-	post.popularity = req.body.popularity;	
-	post.emplacement = req.body.emplacement;
-	post.title = req.body.title;
-	post.content = req.body.content;
-	post.validate(function(e) {
-		if (e) {
-			res.send({status: "error", msg: "erreur de validation", data: e});
-		}
-		else {
-			post.save(function(e) {
-				res.send({status: "success", msg: "Post créé"});
-			});
-		}
-	});
-});
-
-router.put('/setpwd', function(req, res) {
-	let pwd = req.body.pwd;
-	Post.findOne({_id: req.body.id}, function(e, post) {
-		if (e) {
-			res.send({status: 'error', msg: e});
-		} else {
-			bcrypt.hash(pwd, saltRounds, function(err, hash) {
-				post.pwd = hash;
-				post.save();
-				res.send({status: "success", msg: "password créé"});
-			});
-		}
-	});
-});
-
+router.post('/upload/', post_controller.create);
 //soundbank
-router.get('/soundbank', function(req, res) {
-
-	Post.find({}).exec(function(e, posts) {
-		if (e) {
-			res.send({status: "error", msg: "erreur", data: e});
-		}
-		else {
-			res.send({status: "success", msg: "success", posts});
-		}
-	});
-});
-
+router.get('/soundbank', post_controller.get_list);
 //Recherche d'un post
-router.get('/search', function(req, res) {
-
-});
-
+router.get('/search', post_controller.search);
 //Edition de post
-router.put('/edit', function(req, res) {
-	Post.findOneAndUpdate({_id: req.body.id}, {$set:req.body}, function(e, post) {
-		if (e) {
-			res.send ({status: 'error', msg: e});
-		}
-		else {
-			let hash = post.pwd;
-			bcrypt.compare(req.body.hash, hash, function(err, response) {
-				if (response == false) {
-					res.send({status: 'error', msg: err});
-				} else {
-					res.send({status: "success", msg: "Contact mis à jour"});
-				}
-			});
-		}
-	});
-});
-
+router.put('/edit', post_controller.edit);
+//set password
+router.put('/setpwd', post_controller.setpwd);
 //Suppression de post
-router.delete('/delete/', function(req, res) {
-	Post.findOne({_id: req.query.id}, function(e, post) {
-		if (e) {
-			res.json({status: "error", msg: "error", data: e});
-		}
-		else {
-			let hash = post.pwd;
-			bcrypt.compare(req.body.hash, hash, function(err, response) {
-				if (response == false) {
-					res.send({status: 'error', msg: err});
-				} else {
-					post.remove(function(e) {
-						res.json({status: "success", msg: "post supprimé"});
-					});
-				}
-			});
-		}
-	});
-});
+router.delete('/delete', post_controller.delete);
+
 module.exports = router;

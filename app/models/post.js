@@ -5,7 +5,7 @@ var postSchema = new Schema({
 	author: {
 		type: String,
 	},
-	pwd: {
+	hash: {
 		type: String,
 	},
 	posted_at: {
