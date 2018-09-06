@@ -4,7 +4,7 @@ let Post = require('../app/models/post');
 let Seeder = {
 	
 	seed: function() {
-		// mongoose.connection.collections['contacts'].drop( function(err) {
+		// mongoose.connection.collections['posts'].drop( function(err) {
 		// 	console.log('collection dropped');
 		// });
 		// this.createContact();
@@ -14,9 +14,9 @@ let Seeder = {
 	createContact: function() {
 		let post = new Post();		
 		post.author = 'dania';
+		post.content = "voila";
 		post.title = 'Ultra';
-		post.pwd = '5';
-		post.mail = 'daniamail';
+		post.mail = 'daniamail@gmail.com';
 		post.popularity = 5;
 		post.emplacement = 'emplacement?';
 		post.save();

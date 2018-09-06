@@ -1,9 +1,13 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let validate = require('mongoose-validator');
+let Validator = require('../../db/validators/validator');
 
-var postSchema = new Schema({
+
+let postSchema = new Schema({
 	author: {
 		type: String,
+		validate: Validator.authorValidator
 	},
 	hash: {
 		type: String,
@@ -16,15 +20,18 @@ var postSchema = new Schema({
 	},
 	mail:  {
 		type: String,
+		lowercase: true,
+		validate: Validator.emailValidator
 	},
 	title: {
 		type: String,
-		required: true
+		validate: Validator.titleValidator
 	},
 	content: {
 		type: String,
+		validate: Validator.contentValidator
 	},
-	style:  {
+	tags:  {
 		type: String,
 	},
 	popularity: {
@@ -33,7 +40,8 @@ var postSchema = new Schema({
 	emplacement: {
 		type: String,
 	},
+
 });
 
-var Post = mongoose.model('Contact', postSchema);
+let Post = mongoose.model('Post', postSchema);
 module.exports = Post;

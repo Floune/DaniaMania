@@ -5,8 +5,9 @@ let mongoose = require('mongoose');
 let Seeder = require('../db/seed');
 let Post = require('../app/models/post');
 let post_controller = require('../controllers/post_controller');
+let Db = require('../db/connexion');
 
-mongoose.connect('mongodb://localhost:27017/posts', {useNewUrlParser: true});
+
 Seeder.seed();
 
 router.get('/', function(req, res) {
@@ -18,13 +19,13 @@ router.get('/', function(req, res) {
 router.post('/upload', post_controller.create);
 //soundbank
 router.get('/soundbank', post_controller.get_list);
-//Recherche d'un post
+//Recherche d'un thread/post
 router.get('/search', post_controller.search);
-//Edition de post
+//Edition de thread/post
 router.put('/edit', post_controller.edit);
 //set password
 router.put('/setpwd', post_controller.setpwd);
-//Suppression de post
+//Suppression de thread/post
 router.delete('/delete', post_controller.delete);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 let Post = require('../app/models/post.js');
 let bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 exports.check = function(req, res, next) {
 	let id;
@@ -15,10 +16,9 @@ exports.check = function(req, res, next) {
 			let hash = post.hash;
 			bcrypt.compare(pwd, hash, function(err, response) {
 				if(response) {
-					res.send({status: 'success', msg: 'sukssé'});
 					next();
 				} else {
-					res.send({status: 'error', msg: 'eraur'});
+					res.send({status: 'error', msg: 'password error'});
 				} 
 			});
 			
@@ -29,5 +29,17 @@ exports.check = function(req, res, next) {
 };
 
 exports.setpwd = function(req, res, next) {
-	res.send('okokokokoko');
+	let pwd = req.body.hash;
+	Post.findOne({_id: req.body.id}, function(e, post) {
+		if (e) {
+			res.send({status: 'error', msg: e});
+		} else {
+			bcrypt.hash(pwd, saltRounds, function(err, hash) {
+				post.hash = hash;
+				post.save();
+				res.send({status: "success", msg: "password créé"});
+			});
+		}
+	});
+	next();
 }
