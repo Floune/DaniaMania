@@ -1,4 +1,4 @@
-let Post = require('../app/models/post.js');
+let Post = require('../models/post.js');
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
 

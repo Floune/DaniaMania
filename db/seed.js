@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-let Post = require('../app/models/post');
+let Post = require('../models/post');
 
 let Seeder = {
 	

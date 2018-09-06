@@ -1,4 +1,4 @@
-let Post = require('../app/models/post');
+let Post = require('../models/post');
 
 exports.create = function(req, res) {
 	let post = new Post();		

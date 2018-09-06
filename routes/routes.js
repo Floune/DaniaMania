@@ -3,7 +3,7 @@ let express = require("express");
 let app = express();
 let mongoose = require('mongoose');
 let Seeder = require('../db/seed');
-let Post = require('../app/models/post');
+let Post = require('../models/post');
 let post_controller = require('../controllers/post_controller');
 let Db = require('../db/connexion');
 
@@ -11,7 +11,7 @@ let Db = require('../db/connexion');
 Seeder.seed();
 
 router.get('/', function(req, res) {
-	res.send({status: 'success', msg: "yeahyeah"});
+	res.send({status: 'success', msg: "api works"});
 });
 
 
