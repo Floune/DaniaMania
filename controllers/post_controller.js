@@ -1,4 +1,6 @@
-let Post = require('../models/post');
+let Post = require('../db/models/post');
+let Comment = require('../db/models/comment');
+let comment_ctrl = require('./comment_controller');
 
 exports.create = function(req, res) {
 	let post = new Post();		
@@ -28,17 +30,23 @@ exports.edit = function(req, res) {
 	});
 };
 
-exports.get_list = function(req, res) {
-	Post.find({}).exec(function(e, posts) {
-		if (e)
+exports.view = function(req, res) {
+	Post.findOne({_id: req.query.id}, function(e, post) {
+		if (post){
+			Post.findOne({_id: req.query.id}).populate('comments').exec(function (err, comments) { //populate pour acceder aux comments
+				if (err) 
+					return (err);
+				else{
+					res.send({status: 'success', msg: 'success', data: {thread: post, commentaires: comments.comments}});
+				}
+			});
+		} else 
 			res.send({status: 'error', msg: e});
-		else 
-			res.send({status: 'success', msg: 'success', d: posts});
-	});
+		});
 };
 
 exports.search = function(req, res) {
-	Post.find(req.query).exec(function(e, post) {
+	Post.find({}).exec(function(e, post) {
 		if (e)
 			res.send({status: 'error', msg: e});
 		else

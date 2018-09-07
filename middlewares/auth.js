@@ -1,4 +1,4 @@
-let Post = require('../models/post.js');
+let Post = require('../db/models/post.js');
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -42,4 +42,4 @@ exports.setpwd = function(req, res, next) {
 		}
 	});
 	next();
-}
+};
