@@ -7,7 +7,7 @@ let Validator =  {
  authorValidator: [
  validate({
   validator: 'isLength',
-  arguments: [2, 12],
+  arguments: [2, 25],
   message: 'Author should be between {ARGS[0]} and {ARGS[1]} characters',
 }),
  validate({
@@ -50,7 +50,6 @@ let Validator =  {
   message: 'Title should contain alpha-numeric characters only',
 })
  ],
-
 
 }
 

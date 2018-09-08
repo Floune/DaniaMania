@@ -14,7 +14,7 @@ let commentSchema = new Schema({
 		type: String,
 		validate: Validator.contentValidator,
 	},
-	post: [{ type: ObjectId, ref: 'Post' }],
+	post: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
 	created : {
 		type : Date,
 		default : Date.now

@@ -1,6 +1,8 @@
 let mongoose = require('mongoose');
-let Post = require('../models/post')
+let Post = require('../models/post');
 let Comment = require('../models/comment');
+let Tag = require('../models/tags');
+let Categories = require('../models/categories');
 
 class Seeder {
 	
@@ -24,7 +26,6 @@ class Seeder {
 		post.title = 'Ultra';
 		post.mail = 'daniamail@gmail.com';
 		post.popularity = 5;
-		post.emplacement = 'emplacement?';
 		post.comments.push (gru._id, gra._id);
 		post.save();
 		console.log('posts seeded');

@@ -3,7 +3,10 @@ let Schema = mongoose.Schema;
 let validate = require('mongoose-validator');
 let Validator = require('../validators/validator');
 let Comment = require('./comment');
-var ObjectId = mongoose.Schema.Types.ObjectId;
+let ObjectId = mongoose.Schema.Types.ObjectId;
+let Categories = require('./categories');
+let Tags = require('./tags');
+
 
 let postSchema = new Schema({
 	author: {
@@ -29,18 +32,14 @@ let postSchema = new Schema({
 		type: String,
 		validate: Validator.contentValidator
 	},
-	tags:  {
-		type: String,
-	},
-	comments: {
-		type: String,
-	},
 	popularity: {
 		type: Number,
 	},
 	emplacement: {
 		type: String,
 	},
+	tags: [{type: mongoose.Schema.ObjectId, ref : 'Tags'}],
+	categories: [{type: mongoose.Schema.ObjectId, ref : 'Categories'}],
 	comments: [{type: mongoose.Schema.ObjectId, ref : 'Comment'}],
 	created : {
 		type : Date,

@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'app/dist')));	//Middlewares
-app.use('/api/edit*', auth.check); 			//hash verification
-app.use('/api/setpwd*', auth.setpwd);		//hash creation
-app.use('/api/delete*', auth.check); 		//hash verification
+app.use('/api/post/edit*', auth.check); 			//hash verification
+app.use('/api/post/setpwd*', auth.setpwd);		//hash creation
+app.use('/api/post/delete*', auth.check); 		//hash verification
 app.use('/api', routes);					//routes
 
 app.get('*', (req, res) => {

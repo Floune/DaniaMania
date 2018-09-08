@@ -1,6 +1,5 @@
 let Post = require('../db/models/post');
 let Comment = require('../db/models/comment');
-let comment_ctrl = require('./comment_controller');
 
 exports.create = function(req, res) {
 	let post = new Post();		
@@ -8,6 +7,8 @@ exports.create = function(req, res) {
 	post.mail = req.body.mail;
 	post.popularity = req.body.popularity;	
 	post.emplacement = req.body.emplacement;
+	post.categories = req.body.categorie_id;
+	post.tags = req.body.tag_id;
 	post.title = req.body.title;
 	post.content = req.body.content;
 	post.validate(function(e) {
@@ -31,18 +32,12 @@ exports.edit = function(req, res) {
 };
 
 exports.view = function(req, res) {
-	Post.findOne({_id: req.query.id}, function(e, post) {
-		if (post){
-			Post.findOne({_id: req.query.id}).populate('comments').exec(function (err, comments) { //populate pour acceder aux comments
-				if (err) 
-					return (err);
-				else{
-					res.send({status: 'success', msg: 'success', data: {thread: post, commentaires: comments.comments}});
-				}
-			});
-		} else 
-			res.send({status: 'error', msg: e});
-		});
+	Post.findOne({_id: req.query.id}).populate('comments').populate('categories').populate('tags').exec(function (err, comments) { //populate pour acceder aux comments
+		if (err) 
+			res.send({status: 'error', msg: err});
+		else
+			res.send({status: 'success', msg: 'success', data: comments});
+	});
 };
 
 exports.search = function(req, res) {
@@ -64,5 +59,5 @@ exports.delete = function(req, res) {
 };
 
 exports.setpwd = function(req, res) {
-	console.log('password set !');
+	console.log('password set !ctrl');
 };

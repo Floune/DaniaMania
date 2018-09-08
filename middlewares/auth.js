@@ -30,6 +30,7 @@ exports.check = function(req, res, next) {
 
 exports.setpwd = function(req, res, next) {
 	let pwd = req.body.hash;
+	console.log('yeye');
 	Post.findOne({_id: req.body.id}, function(e, post) {
 		if (e) {
 			res.send({status: 'error', msg: e});
@@ -38,8 +39,8 @@ exports.setpwd = function(req, res, next) {
 				post.hash = hash;
 				post.save();
 				res.send({status: "success", msg: "password créé"});
+				next();
 			});
 		}
 	});
-	next();
 };

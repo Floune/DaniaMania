@@ -5,6 +5,8 @@ let mongoose = require('mongoose');
 let Seeder = require('../db/seeds/seed');
 let Post = require('../db/models/post');
 let post_controller = require('../controllers/post_controller');
+let comment_controller = require('../controllers/comment_controller');
+let categorie_controller = require('../controllers/categorie_controller');
 let Db = require('../db/connexion');
 
 new Seeder();
@@ -13,18 +15,19 @@ router.get('/', function(req, res) {
 	res.send({status: 'success', msg: "api works"});
 });
 
+//threads
+router.post('/post/upload', post_controller.create); //upload
+router.get('/post/view', post_controller.view); //post view
+router.get('/post/search', post_controller.search); //recherche
+router.put('/post/setpwd', post_controller.setpwd); //set pwd
+router.put('/post/edit', post_controller.edit); //édition
+router.delete('/post/delete', post_controller.delete); //delete
 
-//Upload
-router.post('/upload', post_controller.create);
-//soundbank
-router.get('/view', post_controller.view);
-//Recherche d'un thread/post
-router.get('/search', post_controller.search);
-//Edition de thread/post
-router.put('/edit', post_controller.edit);
-//set password
-router.put('/setpwd', post_controller.setpwd);
-//Suppression de thread/post
-router.delete('/delete', post_controller.delete);
+//comments
+router.post('/comment/upload', comment_controller.create); //create comment
+
+//categories
+router.post('/categories/upload', categorie_controller.create); //create categorie
+router.get('/categories/getlist', categorie_controller.getlist); //create categorie
 
 module.exports = router;
