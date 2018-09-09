@@ -1,5 +1,7 @@
 let Post = require('../db/models/post');
 let Comment = require('../db/models/comment');
+let Categorie = require('../db/models/categories');
+let Tags = require('../db/models/tags');
 
 exports.create = function(req, res) {
 	let post = new Post();		
@@ -15,8 +17,15 @@ exports.create = function(req, res) {
 		if (e) 
 			res.send({status: 'error', msg: "validation error", data: e});
 		else {
-			post.save(function() {
-				res.send({status: 'success', msg: 'item created'});
+			post.save();
+			Categorie.findOne({_id: req.body.categorie_id}, function(e, categorie) {
+				if (e)
+					res.send({status: 'error', msg: 'categorie not found'});
+				else {
+					categorie.post.push(post._id);
+					categorie.save();
+					res.send({status: 'success', msg: "item created"});
+				}
 			});
 		}
 	});
@@ -32,11 +41,16 @@ exports.edit = function(req, res) {
 };
 
 exports.view = function(req, res) {
-	Post.findOne({_id: req.query.id}).populate('comments').populate('categories').populate('tags').exec(function (err, comments) { //populate pour acceder aux comments
-		if (err) 
+	Post
+		.findOne({_id: req.query.id})
+		.populate('comments categories')
+		.lean()
+		.exec(function (err, post) {
+		if (err) {
 			res.send({status: 'error', msg: err});
+		}
 		else
-			res.send({status: 'success', msg: 'success', data: comments});
+			res.send({status: 'success', msg: 'success', data: post});
 	});
 };
 

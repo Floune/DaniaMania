@@ -7,8 +7,8 @@ let Categories = require('../models/categories');
 class Seeder {
 	
 	constructor() {
-		// this.dropDbs();
-		// this.seed();
+		this.dropDbs();
+		this.seed();
 	}
 
 	dropDbs() {

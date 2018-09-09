@@ -3,6 +3,7 @@ let Schema = mongoose.Schema;
 let validate = require('mongoose-validator');
 let Validator = require('../validators/validator');
 let Post = require('./post');
+let Categorie = require('./categories');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 let commentSchema = new Schema({

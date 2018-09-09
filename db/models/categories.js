@@ -11,7 +11,6 @@ let categorieSchema = new Schema({
 		type: String,
 	},
 	post: [{type: mongoose.Schema.ObjectId, ref : 'Post'}],
-
 });
 
 let Categorie = mongoose.model('Categorie', categorieSchema);
