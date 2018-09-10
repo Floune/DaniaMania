@@ -10,8 +10,13 @@ let categorieSchema = new Schema({
 	name: {
 		type: String,
 	},
-	post: [{type: mongoose.Schema.ObjectId, ref : 'Post'}],
+	posts: [
+		{
+			type: mongoose.Schema.ObjectId,
+			ref : 'Post'
+		}
+	],
 });
 
-let Categorie = mongoose.model('Categorie', categorieSchema);
-module.exports = Categorie;
+let Categories = mongoose.model('Categories', categorieSchema);
+module.exports = Categories;

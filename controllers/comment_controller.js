@@ -9,6 +9,7 @@ exports.create = function(req, res) {
 	comment.post = req.body.post_id;
 	comment.save();
 	Post.findOne({_id: req.body.post_id}, function(e, post) {
+		console.log(post);
 		post.comments.push(comment._id);
 		post.save();
 	});

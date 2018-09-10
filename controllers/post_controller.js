@@ -22,7 +22,7 @@ exports.create = function(req, res) {
 				if (e)
 					res.send({status: 'error', msg: 'categorie not found'});
 				else {
-					categorie.post.push(post._id);
+					categorie.posts.push(post._id);
 					categorie.save();
 					res.send({status: 'success', msg: "item created"});
 				}
@@ -43,7 +43,7 @@ exports.edit = function(req, res) {
 exports.view = function(req, res) {
 	Post
 		.findOne({_id: req.query.id})
-		.populate('comments categories')
+		.populate('categories comments')
 		.lean()
 		.exec(function (err, post) {
 		if (err) {

@@ -30,13 +30,13 @@ exports.check = function(req, res, next) {
 
 exports.setpwd = function(req, res, next) {
 	let pwd = req.body.hash;
-	console.log('yeye');
 	Post.findOne({_id: req.body.id}, function(e, post) {
+	console.log(post);
 		if (e) {
 			res.send({status: 'error', msg: e});
 		} else {
-			bcrypt.hash(pwd, saltRounds, function(err, hash) {
-				post.hash = hash;
+			bcrypt.hash(pwd, saltRounds, function(err, tmp) {
+				post.hash = tmp;
 				post.save();
 				res.send({status: "success", msg: "password créé"});
 				next();
