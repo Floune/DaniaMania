@@ -9,14 +9,14 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, 'app/dist')));	//Middlewares
+app.use(express.static(path.join(__dirname, 'app/dist/DaniaM')));	//Middlewares
 app.use('/api/post/edit*', auth.check); 			//hash verification
 app.use('/api/post/setpwd*', auth.setpwd);		//hash creation
 app.use('/api/post/delete*', auth.check); 		//hash verification
 app.use('/api', routes);					//routes
 
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'app/dist/index.html'));
+	res.sendFile(path.join(__dirname, 'app/dist/DaniaM/index.html'));
 });
 
 app.listen(port, () => console.log(`API running on localhost:${port}`));	//serveur

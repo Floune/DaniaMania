@@ -4,10 +4,11 @@ let Categorie = require('../db/models/categories');
 
 exports.getlist = function(req, res) {
 	Categorie.find({}).exec(function(e, categories) {
-		if (e)
+		if (e){
 			res.send({status: 'error', msg: e});
+		}
 		else {
-			res.send({status: 'success', msg: 'success', data: categories});
+			res.send({categories});
 		}
 	});
 };
